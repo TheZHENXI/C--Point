@@ -1,0 +1,73 @@
+/*
+ * @Author: error: git config user.name && git config user.email & please set dead value or install git
+ * @Date: 2022-09-13 21:32:20
+ * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ * @LastEditTime: 2022-09-13 22:15:08
+ * @FilePath: /CCODE/指针进阶/回调函数.c
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+#include <stdio.h>
+#include <stdlib.h>
+
+//交换每个字节的内容
+void swap(char* a,char* b,int width)
+{
+    for(int i = 0;i < width;i++)
+    {
+        int tmp = *(a+i);
+        *(a+i) = *(b+i);
+        *(b+i) = tmp;
+    }
+}
+
+//通用型的排序，是不知道来的数组是什么类型，也不知道数组内的元素的类型，所以他们的地址都用void* 存放
+void bubble_sort(void* base,int len,int width,int (*cmp) (const void*,const void*))
+{
+    for(int i = 0;i < len -1;i++)
+    {
+        for(int j = 0;j < len - 1 - i;j++)
+        {
+            if( cmp((char*)base +j*width  ,  (char*)base+ (j+1)*width) > 0)//
+                swap((char*)base +j*width,(char*)base + (j+1)*width, width);
+        }
+    }
+}
+
+int int_sort(const void* e1,const void* e2)
+{
+    return *(int*)e1 - *(int*)e2;
+}
+
+int float_sort(const void* e1,const void* e2)
+{
+    return ((int)(*(float*)e1 - *(float*)e2));
+}
+
+void test2()
+{
+    float a[10] = {2.1,0.5,1.6,3.8,4.9,8.0,6.8,7.5,5.3,9.6};
+    int sz = sizeof(a)/sizeof(a[0]);
+    bubble_sort(a,sz,sizeof(a[0]),float_sort);
+    for(int i = 0;i < sz;i++)
+    {
+        printf("%f ",a[i]);
+    }
+}
+
+void test1()
+{
+    int a[10] = {2,0,1,3,9,8,6,7,5,20};
+    int sz = sizeof(a)/sizeof(a[0]);
+    bubble_sort(a,sz,sizeof(a[0]),int_sort);
+    for(int i = 0;i < sz;i++)
+    {
+        printf("%d ",a[i]);
+    }
+}
+
+int main()
+{
+    test1();
+    
+    return 0;
+}
